@@ -34,6 +34,7 @@ struct MainCalculator: View {
                     currentComputation: $currentComputation, mainResult: $mainResult)
             }
         }
+        .environment(\.colorScheme, lightMode ? .light : .dark)
     }
 }
 

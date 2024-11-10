@@ -13,8 +13,7 @@ struct CalcButtonView: View {
     @Binding var mainResult: String
     
     var body: some View {
-        Text(currentComputation)
-        Text(mainResult)
+        Text("Calc Buttons")
     }
 }
 
