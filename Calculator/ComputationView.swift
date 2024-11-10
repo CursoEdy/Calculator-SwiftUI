@@ -13,13 +13,29 @@ struct ComputationView: View {
     let mainResult: String
     
     var body: some View {
-        VStack {
-            Text(currentComputation)
-            Text(mainResult)
-        }
+        VStack (spacing: 15){
+            HStack {
+                Spacer()
+                Text(currentComputation)
+                    .foregroundStyle(foregroundDigitsColor)
+                    .lineLimit(1)
+            }
+            .minimumScaleFactor(0.1)
+            HStack {
+                Spacer()
+                Text(mainResult)
+                    .foregroundStyle(foregroundDigitsColor)
+                    .lineLimit(1)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+            }
+            .minimumScaleFactor(0.1)
+        }.padding(.horizontal)
     }
 }
 
 #Preview {
-    ComputationView(currentComputation: "5+1", mainResult: "6")
+    VStack {
+        ComputationView(currentComputation: "5+1", mainResult: "6")
+    }
 }
