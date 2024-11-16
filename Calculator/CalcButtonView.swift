@@ -40,7 +40,7 @@ struct CalcButtonView: View {
             calcButtonModel(calcButton: .four),
             calcButtonModel(calcButton: .five),
             calcButtonModel(calcButton: .six),
-            calcButtonModel(calcButton: .divide, color: foregroundRightButtonsColor)
+            calcButtonModel(calcButton: .subtract, color: foregroundRightButtonsColor)
         ]),
         RowOfCalcButtonModel(row: [
             calcButtonModel(calcButton: .one),
@@ -65,6 +65,7 @@ struct CalcButtonView: View {
                         Button (action: {
                             //logic takes place here
                             print("Button pressed")
+                            buttonPressed(calcButton: calcbuttonModel.calcButton)
                         }, label: {
                             ButtonView(
                                 calcButton: calcbuttonModel.calcButton,
@@ -77,6 +78,41 @@ struct CalcButtonView: View {
         }
         .padding()
         .background(secondaryBackgroundColor.cornerRadius(20))
+    }
+    
+    func buttonPressed(calcButton: CalcButton){
+        //logica
+        switch calcButton {
+        case .clear:
+            currentComputation = ""
+            mainResult = "0"
+        case .decimal:
+            print("decimal")
+        case .equal, .negative:
+            print("eq/neg")
+        case .undo:
+            print("undo")
+            //remove o ultimo caracter da string
+            currentComputation = String(currentComputation.dropLast())
+        case .add, .multiply, .subtract, .divide:
+            print("Operacoes")
+            if lastCharIsDigitOrPercent(str: currentComputation){
+                appendToCurrentComputation(calcButton: calcButton)
+            }
+        case .percent:
+            print("percent")
+            if lastCharIsDigit(str: currentComputation) {
+                appendToCurrentComputation(calcButton: calcButton)
+            }
+        default:
+            //
+            print("default")
+            appendToCurrentComputation(calcButton: calcButton)
+        }
+        
+        func appendToCurrentComputation(calcButton: CalcButton){
+            currentComputation += calcButton.rawValue
+        }
     }
 }
 
