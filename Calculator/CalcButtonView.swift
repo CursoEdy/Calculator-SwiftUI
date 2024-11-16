@@ -88,6 +88,24 @@ struct CalcButtonView: View {
             mainResult = "0"
         case .decimal:
             print("decimal")
+            if let lastOccurenceOfDecimal = currentComputation.lastIndex(of: ".") {
+                if lastCharIsDigit(str: currentComputation) {
+                    let startindex = currentComputation.index(lastOccurenceOfDecimal, offsetBy: 1)
+                    let endindex = currentComputation.endIndex
+                    let range = startindex..<endindex
+                    let rightSubString = String(currentComputation[range])
+                    
+                    if Int(rightSubString) == nil && !rightSubString.isEmpty {
+                        currentComputation += "."
+                    }
+                }
+            } else {
+                if currentComputation.isEmpty {
+                    currentComputation += "0."
+                } else if lastCharIsDigit(str: currentComputation){
+                    currentComputation += "."
+                }
+            }
         case .equal, .negative:
             if !currentComputation.isEmpty {
                 if !lastCharacterIsAnOperator(str: currentComputation) {
