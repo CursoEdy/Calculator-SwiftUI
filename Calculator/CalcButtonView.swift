@@ -89,30 +89,56 @@ struct CalcButtonView: View {
         case .decimal:
             print("decimal")
         case .equal, .negative:
-            print("eq/neg")
+            if !currentComputation.isEmpty {
+                if !lastCharacterIsAnOperator(str: currentComputation) {
+                    let sign = calcButton == .negative ? -1.0 : 1.0
+                    
+                    mainResult = formatResult(val: sign * calculateResults())
+                    
+                    if calcButton == .negative {
+                        currentComputation = mainResult
+                    }
+                }
+                print()
+            }
         case .undo:
-            print("undo")
             //remove o ultimo caracter da string
             currentComputation = String(currentComputation.dropLast())
         case .add, .multiply, .subtract, .divide:
-            print("Operacoes")
             if lastCharIsDigitOrPercent(str: currentComputation){
                 appendToCurrentComputation(calcButton: calcButton)
             }
         case .percent:
-            print("percent")
             if lastCharIsDigit(str: currentComputation) {
                 appendToCurrentComputation(calcButton: calcButton)
             }
         default:
-            //
-            print("default")
             appendToCurrentComputation(calcButton: calcButton)
         }
         
-        func appendToCurrentComputation(calcButton: CalcButton){
-            currentComputation += calcButton.rawValue
+        
+    }
+    
+    func calculateResults() -> Double {
+        let visibleWorkings: String = currentComputation
+        var workings = visibleWorkings.replacingOccurrences(of: "%", with: "*0.01")
+        workings = workings.replacingOccurrences(of: multiplySymbol, with: "*")
+//        workings = workings.replacingOccurrences(of: divisionSymbol, with: "/")
+        
+        // if we have "45."this will br replaced
+        //by ""45.0"
+        if getLastChar(str: visibleWorkings) == "." {
+            workings += "0"
         }
+        
+        let expr = NSExpression(format: workings)
+        let exprValue = expr.expressionValue(with: nil, context: nil) as! Double
+        
+        return exprValue
+    }
+    
+    func appendToCurrentComputation(calcButton: CalcButton){
+        currentComputation += calcButton.rawValue
     }
 }
 
